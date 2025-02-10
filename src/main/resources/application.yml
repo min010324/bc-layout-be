@@ -1,0 +1,65 @@
+spring:
+  config:
+    import: optional:file:.env[]
+  application:
+    name: bc-layout-be
+  datasource:
+    url: ${DATABASE_URL}
+    username: ${DATABASE_USERNAME}
+    password: ${DATABASE_PASSWORD}
+    driver-class-name: org.mariadb.jdbc.Driver # diff
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MariaDBDialect # diff
+        format_sql: true
+  #        default_batch_fetch_size: 1000 # N + 1 방지 (in 절 사용)
+  security:
+    oauth2:
+      client:
+        registration:
+          slack:
+            client-id: ${SLACK_CLIENT}
+            client-secret: ${SLACK_SECRET}
+            #            redirect-uri: https://localhost:8080/api/auth/success
+            redirect-uri: https://localhost:8080/login/oauth2/code/slack
+            authorization-grant-type: authorization_code
+            scope:
+              openid, profile, email # for open id, openid가 scope에 포함시 loaduser 호출안됨
+        #              - chat:write # for oauth
+
+        #            user-scope:
+        #              - profile
+        #              - email
+
+        provider:
+          slack:
+            #            authorization-uri: https://slack.com/oauth/v2/authorize
+            #            token-uri: https://slack.com/api/oauth.v2.access
+            #            user-info-uri: https://slack.com/api/users.info
+            authorization-uri: https://slack.com/openid/connect/authorize
+            token-uri: https://slack.com/api/openid.connect.token
+            user-info-uri: https://slack.com/api/openid.connect.userInfo
+            jwk-set-uri: https://slack.com/openid/connect/keys
+            user-name-attribute: sub
+
+
+jwt:
+  secret: lgcnsbclayoutsptingjwttest2025010820250228lgcnsbclayoutsptingjwttest2025010820250228
+  key: lgcnsbclayoutsptingjwttest2025010820250228lgcnsbclayoutsptingjwttest2025010820250228
+
+server:
+  ssl:
+    enabled: true
+    key-store: keystore.p12
+    key-store-password: ${SSL_PASSWORD}
+    key-store-type: PKCS12
+    key-alias: bns-ssl
+  port: 8080
+logging:
+  level:
+    org.springframework.security: DEBUG
+    org.springframework.web.client: DEBUG
