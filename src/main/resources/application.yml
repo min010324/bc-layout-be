@@ -7,14 +7,14 @@ spring:
     url: ${DATABASE_URL}
     username: ${DATABASE_USERNAME}
     password: ${DATABASE_PASSWORD}
-    driver-class-name: org.mariadb.jdbc.Driver # diff
+    driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     show-sql: true
     hibernate:
       ddl-auto: update
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.MariaDBDialect # diff
+        dialect: org.hibernate.dialect.MySQL8Dialect
         format_sql: true
   #        default_batch_fetch_size: 1000 # N + 1 방지 (in 절 사용)
   security:
